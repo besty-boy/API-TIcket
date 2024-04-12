@@ -9,12 +9,15 @@ app.use(bodyParser.json());
 app.use(cors()); // Utilisez le middleware CORS pour activer CORS pour toutes les routes
 
 let tickets = [];
+let nextTicketId = 1; // Initialisation de l'ID du prochain ticket
 
 // Créer un ticket
 app.post('/tickets', (req, res) => {
     const data = req.body;
+    const id = nextTicketId++; // Générer l'ID automatiquement et l'attribuer au ticket
+    data.id = id;
     tickets.push(data);
-    res.status(201).json({ message: 'Ticket créé avec succès' });
+    res.status(201).json({ message: 'Ticket créé avec succès', id: id });
 });
 
 // Récupérer tous les tickets
@@ -61,6 +64,7 @@ app.delete('/tickets/:id', (req, res) => {
 // Réinitialiser les tickets
 app.post('/reset', (req, res) => {
     tickets = [];
+    nextTicketId = 1; // Réinitialiser l'ID du prochain ticket
     res.json({ message: 'Tickets réinitialisés avec succès' });
 });
 
