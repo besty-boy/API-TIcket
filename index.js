@@ -1,10 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors'); // Importez le module CORS
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
+app.use(cors()); // Utilisez le middleware CORS pour activer CORS pour toutes les routes
 
 let tickets = [];
 
