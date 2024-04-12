@@ -53,6 +53,13 @@ app.delete('/tickets/:id', (req, res) => {
     res.json({ message: 'Ticket supprimé avec succès' });
 });
 
+// Réinitialiser les tickets
+app.post('/reset', (req, res) => {
+    tickets = [];
+    res.json({ message: 'Tickets réinitialisés avec succès' });
+});
+
+
 
 app.listen(port, () => {
     console.log(`Serveur démarré sur http://localhost:${port}`);
