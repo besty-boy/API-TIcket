@@ -1,20 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors'); // Importez le module CORS
+const cors = require('cors');
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
-app.use(cors()); // Utilisez le middleware CORS pour activer CORS pour toutes les routes
+app.use(cors());
 
 let tickets = [];
-let nextTicketId = 1; // Initialisation de l'ID du prochain ticket
+let nextTicketId = 1;
+
+// Clé API secrète pour la réinitialisation
+const API_KEY = 'privatekey';
 
 // Créer un ticket
 app.post('/tickets', (req, res) => {
     const data = req.body;
-    const id = nextTicketId++; // Générer l'ID automatiquement et l'attribuer au ticket
+    const id = nextTicketId++;
     data.id = id;
     tickets.push(data);
     res.status(201).json({ message: 'Ticket créé avec succès', id: id });
@@ -61,11 +64,16 @@ app.delete('/tickets/:id', (req, res) => {
     }
 });
 
-// Réinitialiser les tickets
+// Réinitialiser les tickets avec authentification
 app.post('/reset', (req, res) => {
-    tickets = [];
-    nextTicketId = 1; // Réinitialiser l'ID du prochain ticket
-    res.json({ message: 'Tickets réinitialisés avec succès' });
+    const apiKey = req.headers['x-api-key'];
+    if (apiKey && apiKey === API_KEY) {
+        tickets = [];
+        nextTicketId = 1;
+        res.json({ message: 'Tickets réinitialisés avec succès' });
+    } else {
+        res.status(401).json({ message: 'Accès non autorisé' });
+    }
 });
 
 app.listen(port, () => {
