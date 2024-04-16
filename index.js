@@ -64,14 +64,21 @@ app.delete('/tickets/:id', (req, res) => {
 let products = [];
 let nextProductId = 1;
 
-// Ajouter un produit
+// Ajouter un produit avec le nouveau modèle de données
 app.post('/product', (req, res) => {
-    const { name, price, description } = req.body;
-    if (!name || !price) {
-        res.status(400).json({ message: 'Nom et prix du produit sont requis' });
+    const { Projet, lien, description, image_pc, image_mobile } = req.body;
+    if (!Projet || !lien) {  // Vérification que les champs requis sont présents
+        res.status(400).json({ message: 'Le nom du projet et le lien sont requis' });
         return;
     }
-    const product = { id: nextProductId++, name, price, description };
+    const product = {
+        id: nextProductId++,
+        Projet,
+        lien,
+        description,
+        image_pc,
+        image_mobile
+    };
     products.push(product);
     res.status(201).json({ message: 'Produit ajouté avec succès', product });
 });
