@@ -89,16 +89,7 @@ app.get('/products', (req, res) => {
 });
 
 
-app.delete('/products/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    const index = products.findIndex(p => p.id === id);
-    if (index !== -1) {
-        products.splice(index, 1);
-        res.json({ message: 'Produit supprimé avec succès' });
-    } else {
-        res.status(404).send('Produit non trouvé');
-    }
-});
+
 
 
 // Réinitialiser les tickets
