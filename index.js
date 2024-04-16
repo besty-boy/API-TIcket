@@ -1,20 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors'); // Importez le module CORS
+const cors = require('cors');
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
-app.use(cors()); // Utilisez le middleware CORS pour activer CORS pour toutes les routes
+app.use(cors());
 
 let tickets = [];
-let nextTicketId = 1; // Initialisation de l'ID du prochain ticket
+let nextTicketId = 1;
 
 // Créer un ticket
 app.post('/tickets', (req, res) => {
     const data = req.body;
-    const id = nextTicketId++; // Générer l'ID automatiquement et l'attribuer au ticket
+    const id = nextTicketId++;
     data.id = id;
     tickets.push(data);
     res.status(201).json({ message: 'Ticket créé avec succès', id: id });
@@ -61,23 +61,19 @@ app.delete('/tickets/:id', (req, res) => {
     }
 });
 
-const API_KEY = 'api_key2302'; // Clé API pour l'authentification
+let products = [];
+let nextProductId = 1;
 
 // Ajouter un produit
 app.post('/product', (req, res) => {
-    const apiKey = req.headers['x-api-key'];
-    if (apiKey && apiKey === API_KEY) {
-        const { name, price, description } = req.body;
-        if (!name || !price) {
-            res.status(400).json({ message: 'Nom et prix du produit sont requis' });
-            return;
-        }
-        const product = { id: nextProductId++, name, price, description };
-        products.push(product);
-        res.status(201).json({ message: 'Produit ajouté avec succès', product });
-    } else {
-        res.status(401).json({ message: 'Accès non autorisé' });
+    const { name, price, description } = req.body;
+    if (!name || !price) {
+        res.status(400).json({ message: 'Nom et prix du produit sont requis' });
+        return;
     }
+    const product = { id: nextProductId++, name, price, description };
+    products.push(product);
+    res.status(201).json({ message: 'Produit ajouté avec succès', product });
 });
 
 // Récupérer tous les produits
@@ -85,11 +81,10 @@ app.get('/products', (req, res) => {
     res.json(products);
 });
 
-
 // Réinitialiser les tickets
 app.post('/reset', (req, res) => {
     tickets = [];
-    nextTicketId = 1; // Réinitialiser l'ID du prochain ticket
+    nextTicketId = 1;
     res.json({ message: 'Tickets réinitialisés avec succès' });
 });
 
