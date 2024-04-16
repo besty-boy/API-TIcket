@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Connexion à MongoDB
-mongoose.connect('votre_uri_mongodb', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://bbarraud:BYFuBMWob2iEq1LI@cluster0.nt66h53.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Schéma pour les tickets
 const TicketSchema = new mongoose.Schema({
