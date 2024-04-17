@@ -1,29 +1,7 @@
-const fs = require('fs').promises;
-
-async function initializeDataStore() {
-    try {
-        // Vérifier si le fichier 'tickets.json' existe déjà
-        await fs.access('tickets.json').catch(async () => {
-            await fs.writeFile('tickets.json', '[]');
-            console.log('Created tickets.json because it did not exist.');
-        });
-
-        // Vérifier si le fichier 'products.json' existe déjà
-        await fs.access('products.json').catch(async () => {
-            await fs.writeFile('products.json', '[]');
-            console.log('Created products.json because it did not exist.');
-        });
-    } catch (error) {
-        console.error('Error initializing data files:', error);
-    }
-}
-
-initializeDataStore();
-
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const fs = require('fs').promises;
 
 const app = express();
 const port = 3000;
