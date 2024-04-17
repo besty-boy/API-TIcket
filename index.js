@@ -1,12 +1,38 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
 app.use(cors());
+
+// Configuration de la connexion MongoDB
+const uri = "mongodb+srv://bbarraud:zhA8j6LLYvHwm3A@cluster0.nt66h53.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+const client = new MongoClient(uri, {
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true
+    }
+});
+
+let db; // Déclarer db au niveau global
+
+client.connect().then(client => {
+    db = client.db("yourDatabaseName"); // Assure-toi de remplacer "yourDatabaseName" par le nom de ta base de données
+    // Démarrage du serveur une fois la connexion MongoDB établie
+    app.listen(port, () => {
+        console.log(`Serveur démarré sur http://localhost:${port}`);
+    });
+}).catch(err => {
+    console.error("Failed to connect to MongoDB", err);
+    process.exit(1);
+});
+
 
 let tickets = [];
 let nextTicketId = 1;
