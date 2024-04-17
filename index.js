@@ -11,7 +11,6 @@ app.use(cors());
 
 // Configuration de la connexion MongoDB
 const uri = "mongodb+srv://bbarraud:zhA8j6LLYvHwm3A@cluster0.nt66h53.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -23,7 +22,8 @@ const client = new MongoClient(uri, {
 let db; // Déclarer db au niveau global
 
 client.connect().then(client => {
-    db = client.db("yourDatabaseName"); // Assure-toi de remplacer "yourDatabaseName" par le nom de ta base de données
+    db = client.db("bestyboy"); // Utiliser la base de données "bestyboy"
+    console.log("Connected successfully to MongoDB");
     // Démarrage du serveur une fois la connexion MongoDB établie
     app.listen(port, () => {
         console.log(`Serveur démarré sur http://localhost:${port}`);
@@ -33,13 +33,11 @@ client.connect().then(client => {
     process.exit(1);
 });
 
-
-let tickets = [];
-let nextTicketId = 1;
+// Routes pour les tickets
 app.post('/tickets', async (req, res) => {
     const data = req.body;
     try {
-        const collection = db.collection('tickets');
+        const collection = db.collection('ticket'); // S'assurer que le nom de la collection est correct
         const result = await collection.insertOne(data);
         res.status(201).json({ message: 'Ticket créé avec succès', id: result.insertedId });
     } catch (e) {
@@ -49,7 +47,7 @@ app.post('/tickets', async (req, res) => {
 
 app.get('/tickets', async (req, res) => {
     try {
-        const collection = db.collection('tickets');
+        const collection = db.collection('ticket');
         const tickets = await collection.find({}).toArray();
         res.json(tickets);
     } catch (e) {
@@ -58,10 +56,10 @@ app.get('/tickets', async (req, res) => {
 });
 
 app.get('/tickets/:id', async (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
     try {
-        const collection = db.collection('tickets');
-        const ticket = await collection.findOne({ id: id });
+        const collection = db.collection('ticket');
+        const ticket = await collection.findOne({ _id: new MongoClient.ObjectId(id) });
         if (ticket) {
             res.json(ticket);
         } else {
@@ -73,11 +71,11 @@ app.get('/tickets/:id', async (req, res) => {
 });
 
 app.put('/tickets/:id', async (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
     const data = req.body;
     try {
-        const collection = db.collection('tickets');
-        const result = await collection.updateOne({ id: id }, { $set: data });
+        const collection = db.collection('ticket');
+        const result = await collection.updateOne({ _id: new MongoClient.ObjectId(id) }, { $set: data });
         if (result.matchedCount) {
             res.json({ message: 'Ticket mis à jour avec succès' });
         } else {
@@ -89,10 +87,10 @@ app.put('/tickets/:id', async (req, res) => {
 });
 
 app.delete('/tickets/:id', async (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
     try {
-        const collection = db.collection('tickets');
-        const result = await collection.deleteOne({ id: id });
+        const collection = db.collection('ticket');
+        const result = await collection.deleteOne({ _id: new MongoClient.ObjectId(id) });
         if (result.deletedCount) {
             res.json({ message: 'Ticket supprimé avec succès' });
         } else {
@@ -103,24 +101,16 @@ app.delete('/tickets/:id', async (req, res) => {
     }
 });
 
-
-let products = [];
-let nextProductId = 1;
-app.post('/product', async (req, res) => {
+// Routes pour les produits
+app.post('/products', async (req, res) => {
     const { Projet, lien, description, image_pc, image_mobile } = req.body;
     if (!Projet || !lien) {
         res.status(400).json({ message: 'Le nom du projet et le lien sont requis' });
         return;
     }
     try {
-        const collection = db.collection('products');
-        const product = {
-            Projet,
-            lien,
-            description,
-            image_pc,
-            image_mobile
-        };
+        const collection = db.collection('product');
+        const product = { Projet, lien, description, image_pc, image_mobile };
         const result = await collection.insertOne(product);
         res.status(201).json({ message: 'Produit ajouté avec succès', product });
     } catch (e) {
@@ -130,7 +120,7 @@ app.post('/product', async (req, res) => {
 
 app.get('/products', async (req, res) => {
     try {
-        const collection = db.collection('products');
+        const collection = db.collection('product');
         const products = await collection.find({}).toArray();
         res.json(products);
     } catch (e) {
@@ -139,10 +129,10 @@ app.get('/products', async (req, res) => {
 });
 
 app.delete('/products/:id', async (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
     try {
-        const collection = db.collection('products');
-        const result = await collection.deleteOne({ id: id });
+        const collection = db.collection('product');
+        const result = await collection.deleteOne({ _id: new MongoClient.ObjectId(id) });
         if (result.deletedCount) {
             res.json({ message: 'Produit supprimé avec succès' });
         } else {
@@ -153,14 +143,8 @@ app.delete('/products/:id', async (req, res) => {
     }
 });
 
-
 // Réinitialiser les tickets
 app.post('/reset', (req, res) => {
-    tickets = [];
-    nextTicketId = 1;
-    res.json({ message: 'Tickets réinitialisés avec succès' });
-});
-
-app.listen(port, () => {
-    console.log(`Serveur démarré sur http://localhost:${port}`);
+    // Cette route n'a plus de sens avec une base de données MongoDB car elle implique la gestion d'une liste en mémoire
+    res.status(400).json({ message: "Cette fonctionnalité n'est pas implémentée." });
 });
