@@ -15,7 +15,7 @@ app.post('/tickets', async (req, res) => {
     try {
         const data = await fs.readFile('tickets.json');
         const tickets = JSON.parse(data);
-        newTicket.id = tickets.length + 1;  // Simple ID increment
+        newTicket.id = tickets.length + 1;  
         tickets.push(newTicket);
         await fs.writeFile('tickets.json', JSON.stringify(tickets));
         res.status(201).json({ message: 'Ticket créé avec succès', ticket: newTicket });
@@ -60,7 +60,7 @@ app.post('/products', async (req, res) => {
     try {
         const data = await fs.readFile('products.json');
         const products = JSON.parse(data);
-        newProduct.id = products.length + 1;  // Simple ID increment
+        newProduct.id = products.length + 1;  
         products.push(newProduct);
         await fs.writeFile('products.json', JSON.stringify(products));
         res.status(201).json({ message: 'Produit ajouté avec succès', product: newProduct });
