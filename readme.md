@@ -33,7 +33,7 @@ Suivez ces étapes pour installer l'API et démarrer le serveur localement :
 Vous pouvez tester l'API en utilisant des outils comme Postman ou via des requêtes cURL directement depuis votre terminal. Voici quelques exemples de commandes cURL pour interagir avec l'API :
 
 - **Créer un ticket**:
-  ```
+  ```js
   curl -X POST http://localhost:3000/tickets -H 'Content-Type: application/json' -d '{"title": "New Issue", "description": "Details about the issue."}'
   ```
 
