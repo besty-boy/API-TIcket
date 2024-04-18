@@ -4,7 +4,7 @@
 Une API Express.js pour gérer des tickets et des produits de manière efficace et asynchrone.
 
 > [!NOTE]
-> Cette API est conçue pour des démonstrations, à chaque **maj** du fichier, les données enregistrées seront effacées.
+> Cette API est conçue pour des démonstrations, à chaque **mise à jour** du fichier, ou redémarrage de l'hébergeur les données enregistrées seront effacées.
 
 ## Fonctionnalités
 
